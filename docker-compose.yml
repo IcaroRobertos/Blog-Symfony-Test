@@ -12,7 +12,7 @@ services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
     links:
-      - dbsymfony
+      - blogdb
     ports:
       - 8080:80
     environment:
