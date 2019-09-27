@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  blogdb:
+    image: mysql:5.6
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=123123
+      - MYSQL_DATABASE=symfony_demo
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    links:
+      - dbsymfony
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
