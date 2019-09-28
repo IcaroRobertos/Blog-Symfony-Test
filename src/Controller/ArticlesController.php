@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -24,21 +25,22 @@ class ArticlesController extends AbstractController
     // }
 
     /**
-     * @Route("/articles", methods="GET")
+     * @Route("/articles", methods="POST")
      */
-    public function create(EntityManagerInterface $entityManager, SerializerInterface $serializer): Response
+    public function create(EntityManagerInterface $entityManager, SerializerInterface $serializer, Request $request): Response
     {
+        
+        $data = $request->request;
+
         $article = new Article();
-        $article->setTitle('Demo de Artigo');
-        $article->setText('Demo de texto de artigo loren ipsum dolor set amet');
+        $article->setTitle($data->get('title'));
+        $article->setText($data->get('text'));
+        $article->setAuthor($data->get('author'));
         
         $entityManager->persist($article);
         $entityManager->flush();
 
-        $repository = $this->getDoctrine()->getRepository(Article::class);
-        $product = $repository->find($article->getId());
-
-        $json = $serializer->serialize($product, 'json');
+        $json = $serializer->serialize($article, 'json');
 
         return new Response($json);
     }
