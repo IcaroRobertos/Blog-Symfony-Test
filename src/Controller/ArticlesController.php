@@ -13,16 +13,18 @@ use App\Entity\Article;
 
 class ArticlesController extends AbstractController
 {
-    // /**
-    //  * @Route("/articles", name="articles")
-    //  */
-    // public function index()
-    // {
-    //     return $this->json([
-    //         'message' => 'Welcome to your new controller!',
-    //         'path' => 'src/Controller/ArticlesController.php',
-    //     ]);
-    // }
+    /**
+     * @Route("/articles", methods="GET")
+     */
+    public function index(SerializerInterface $serializer): Response
+    {
+        $articlesRepository = $this->getDoctrine()->getRepository(Article::class);
+        $allArticles = $articlesRepository->findAll();
+
+        $json = $serializer->serialize($allArticles, 'json');
+
+        return new Response($json);
+    }
 
     /**
      * @Route("/articles", methods="POST")
